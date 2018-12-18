@@ -10,20 +10,15 @@ public class DatabaseConnection {
     public static final String DB_NAME = "employee.sqlite";
     public static final String CONNECTION_STRING = "jdbc:sqlite:" + DB_NAME;
 
-    private Connection connection;
-
-    public boolean getConnection() {
+    public static Connection getConnection() {
         try {
-            connection = DriverManager.getConnection(CONNECTION_STRING);
-            return true;
-
+            Connection connection = DriverManager.getConnection(CONNECTION_STRING);
+            return connection;
         } catch(SQLException e) {
-            System.out.println("Couldn't connect to the database." + e.getMessage());
-            return false;
+            System.out.println("Error connecting to the database. " + e.getMessage());
+            return null;
         }
-    }
-
-
+}
 
 
 
