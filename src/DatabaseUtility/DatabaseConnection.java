@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class DatabaseConnection {
 
     public static final String DB_NAME = "employee.sqlite";
-    public static final String CONNECTION_STRING = "jdbc:sqlite:" + DB_NAME;
+    public static final String CONNECTION_STRING = "jdbc:sqlite:C:\\JavaProjects\\EmployeeManagement\\" + DB_NAME;
 
     public static Connection getConnection() {
         try {

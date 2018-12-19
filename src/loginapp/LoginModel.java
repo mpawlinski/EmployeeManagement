@@ -45,8 +45,18 @@ public class LoginModel {
             return false;
         } finally {
             try {
-                queryLogin.close();
-                results.close();
+
+                if (queryLogin != null) {
+                    queryLogin.close();
+                }
+
+                if(results != null) {
+                    results.close();
+                }
+
+//                if(connection != null) {
+//                    connection.close();
+//                }
             } catch (SQLException e) {
                 System.out.println("Error closing database. " + e.getMessage());
                 e.printStackTrace();
