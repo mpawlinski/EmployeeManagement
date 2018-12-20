@@ -56,6 +56,8 @@ public class LoginController {
     public void login(ActionEvent event) {
         // when login button's pressed - close login window
         if(loginModel.isLoggedIn(username.getText(), password.getText(), comboBox.getValue().toString())) {
+
+            // closing login window after successfully logging in
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.close();
 
@@ -70,7 +72,7 @@ public class LoginController {
 
         } else {
             loginStatus.setText("Incorrect");
-            loginStatus.setTextFill(Color.DARKRED);
+            loginStatus.setTextFill(Color.RED);
         }
     }
 
@@ -84,6 +86,7 @@ public class LoginController {
 
             employeeStage.setScene(scene);
             employeeStage.setTitle("Employee");
+            employeeStage.resizableProperty().setValue(false);
             employeeStage.show();
 
         } catch(IOException e) {
@@ -102,6 +105,7 @@ public class LoginController {
 
             adminStage.setScene(adminScene);
             adminStage.setTitle("Admin");
+            adminStage.resizableProperty().setValue(false);
             adminStage.show();
 
         } catch(IOException e) {

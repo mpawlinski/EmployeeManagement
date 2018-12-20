@@ -39,10 +39,10 @@ public class LoginModel {
             } else {
                 return false;
             }
-
         } catch(SQLException e) {
             System.out.println("Login error! " + e.getMessage());
             return false;
+
         } finally {
             try {
 
@@ -54,9 +54,6 @@ public class LoginModel {
                     results.close();
                 }
 
-//                if(connection != null) {
-//                    connection.close();
-//                }
             } catch (SQLException e) {
                 System.out.println("Error closing database. " + e.getMessage());
                 e.printStackTrace();
