@@ -1,6 +1,6 @@
 package loginapp;
 
-import DatabaseUtility.DatabaseConnection;
+import model.DataSource;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,14 +14,14 @@ public class LoginModel {
     public static final String LOGIN_QUERY = "SELECT * FROM login WHERE username = ? AND password = ? AND status = ?";
 
     public LoginModel() {
-        this.connection = DatabaseConnection.getConnection();
+        this.connection = DataSource.getInstance().getConnection();
         if(this.connection == null) {
             System.exit(-1);
         }
     }
 
     public boolean isDatabaseConnected() {
-        return this.connection != null;
+        return connection != null;
     }
 
     public boolean isLoggedIn(String username, String password, String status) {
@@ -43,21 +43,22 @@ public class LoginModel {
             System.out.println("Login error! " + e.getMessage());
             return false;
 
-        } finally {
-            try {
-
-                if (queryLogin != null) {
-                    queryLogin.close();
-                }
-
-                if(results != null) {
-                    results.close();
-                }
-
-            } catch (SQLException e) {
-                System.out.println("Error closing database. " + e.getMessage());
-                e.printStackTrace();
-            }
         }
+//        finally {
+//            try {
+//
+//                if (queryLogin != null) {
+//                    queryLogin.close();
+//                }
+//
+//                if(results != null) {
+//                    results.close();
+//                }
+//
+//            } catch (SQLException e) {
+//                System.out.println("Error closing database. " + e.getMessage());
+//                e.printStackTrace();
+//            }
+//        }
     }
 }

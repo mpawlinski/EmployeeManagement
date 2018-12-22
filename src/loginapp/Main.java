@@ -1,5 +1,6 @@
 package loginapp;
 
+import model.DataSource;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,6 +17,20 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    @Override
+    public void init() throws Exception {
+        super.init();
+        // add pop up dialogue if an error occurs
+        if (!DataSource.getInstance().open()) {
+            System.out.println("FATAL ERROR: Couldn't connect to the database. ");
+        }
+    }
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        DataSource.getInstance().close();
+    }
 
     public static void main(String[] args) {
         launch(args);

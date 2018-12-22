@@ -3,7 +3,6 @@ package loginapp;
 import admin.AdminController;
 import employee.EmployeeController;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -53,7 +52,7 @@ public class LoginController {
     }
 
     @FXML
-    public void login(ActionEvent event) {
+    public void login() {
         // when login button's pressed - close login window
         if(loginModel.isLoggedIn(username.getText(), password.getText(), comboBox.getValue().toString())) {
 
@@ -101,6 +100,7 @@ public class LoginController {
             Stage adminStage = new Stage();
             Parent root = loader.load();
             AdminController adminController = loader.getController();
+            adminController.listEmployees();
             Scene adminScene = new Scene(root);
 
             adminStage.setScene(adminScene);
