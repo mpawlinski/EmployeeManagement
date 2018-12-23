@@ -37,6 +37,19 @@ public class AdminController {
         new Thread(task).start();
     }
 
+    @FXML
+    public void insertEmployee() throws SQLException {
+        String id = idTextField.getText();
+        String firstName = firstNameTextField.getText();
+        String lastName = lastNameTextField.getText();
+        String email = emailTextField.getText();
+        String dob = dobDatePickerField.getEditor().getText();
+
+        DataSource.getInstance().addEmployee(id, firstName, lastName, email, dob);
+        listEmployees();
+        clear();
+    }
+
     public void clearFields() {
         idTextField.setText("");
         firstNameTextField.setText("");
@@ -46,7 +59,7 @@ public class AdminController {
     }
 
     @FXML
-    public void clearButton() {
+    public void clear() {
         clearFields();
     }
 }

@@ -21,6 +21,7 @@ public class Main extends Application {
     public void init() throws Exception {
         super.init();
         // add pop up dialogue if an error occurs
+        // do not start application if there's an error
         if (!DataSource.getInstance().open()) {
             System.out.println("FATAL ERROR: Couldn't connect to the database. ");
         }

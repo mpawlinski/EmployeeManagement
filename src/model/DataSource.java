@@ -15,29 +15,36 @@ public class DataSource {
 
     private Connection connection;
 
-//    private PreparedStatement insertIntoEmployees;
+    private PreparedStatement listEmployees;
+    private PreparedStatement insertIntoEmployees;
 
     public boolean open() {
         try {
             connection = DriverManager.getConnection(CONNECTION_STRING);
-//            insertIntoEmployees = connection.prepareStatement(INSERT_EMPLOYEE);
-
+            listEmployees = connection.prepareStatement(QUERY_EMPLOYEES);
+            insertIntoEmployees = connection.prepareStatement(INSERT_EMPLOYEE);
             return true;
+
         } catch (SQLException e) {
-            System.out.println("Couldn't connect to databse. " + e.getMessage());
+            System.out.println("Couldn't connect to database. " + e.getMessage());
             return false;
         }
     }
 
     public void close() {
         try {
+
+            if (listEmployees != null) {
+                listEmployees.close();
+            }
+
+            if (insertIntoEmployees != null) {
+                insertIntoEmployees.close();
+            }
+
             if (connection != null) {
                 connection.close();
             }
-
-//            if (insertIntoEmployees != null) {
-//                insertIntoEmployees.close();
-//            }
 
         } catch (SQLException e) {
             System.out.println("Couldn't close the database. " + e.getMessage());
@@ -48,17 +55,6 @@ public class DataSource {
     public Connection getConnection() {
         return connection;
     }
-
-//    public  Connection getConnection() {
-//        try {
-//            Connection connection = DriverManager.getConnection(CONNECTION_STRING);
-//            return connection;
-//        } catch (SQLException e) {
-//            System.out.println("Error connecting to the database. " + e.getMessage());
-//            return null;
-//        }
-//
-//    }
 
     //singleton
     private static DataSource instance = new DataSource();
@@ -74,8 +70,8 @@ public class DataSource {
 
     public List<Employee> queryEmployees() {
 
-        try(Statement statement = connection.createStatement();
-            ResultSet results = statement.executeQuery(QUERY_EMPLOYEES)) {
+        try {
+            ResultSet results = listEmployees.executeQuery();
 
             List<Employee> employees = new ArrayList<>();
             while(results.next()) {
@@ -101,7 +97,28 @@ public class DataSource {
     // check if it exists, create psfs for that, prepared statement, check for null in close method
     // pass all parameters to check if it already exists in a database by select where = ? ? ? ? ?
 
+    public void addEmployee(String id, String firstName, String lastName, String email, String dob) {
 
+        try {
+            insertIntoEmployees.setString(1, id);
+            insertIntoEmployees.setString(2, firstName);
+            insertIntoEmployees.setString(3, lastName);
+            insertIntoEmployees.setString(4, email);
+            insertIntoEmployees.setString(5, dob);
+
+            int affectedRows = insertIntoEmployees.executeUpdate();
+            if (affectedRows != 1) {
+                System.out.println("Adding employee failed.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error " + e.getMessage());
+            e.printStackTrace();
+        }
+
+
+
+    }
 
 
 
