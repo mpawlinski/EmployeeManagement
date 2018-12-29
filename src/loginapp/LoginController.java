@@ -53,7 +53,7 @@ public class LoginController {
 
     @FXML
     public void login() {
-        // when login button's pressed - close login window
+        // when login button is pressed - close login window
         if(loginModel.isLoggedIn(username.getText(), password.getText(), comboBox.getValue().toString())) {
 
             // closing login window after successfully logging in
@@ -79,7 +79,7 @@ public class LoginController {
         try {
             FXMLLoader loader = new FXMLLoader();
             Stage employeeStage = new Stage();
-            Pane root = (Pane)loader.load(getClass().getResource("/employee/employee.fxml").openStream());
+            Pane root = loader.load(getClass().getResource("/employee/employee.fxml").openStream());
             EmployeeController employeeController = loader.getController();
             Scene scene = new Scene(root);
 

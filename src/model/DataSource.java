@@ -13,16 +13,20 @@ public class DataSource {
     public static final String INSERT_EMPLOYEE = "INSERT INTO employees(id, firstname, lastname, email, dateofbirth)" +
             " VALUES (?, ?, ?, ?, ?)";
 
+    public static final String UPDATE_EMPLOYEE = "UPDATE employees SET id = ?, firstname = ?, lastname = ?, email = ? WHERE id = ? AND firstname = ? AND lastname = ?";
+
     private Connection connection;
 
     private PreparedStatement listEmployees;
     private PreparedStatement insertIntoEmployees;
+    private PreparedStatement updateEmployee;
 
     public boolean open() {
         try {
             connection = DriverManager.getConnection(CONNECTION_STRING);
             listEmployees = connection.prepareStatement(QUERY_EMPLOYEES);
             insertIntoEmployees = connection.prepareStatement(INSERT_EMPLOYEE);
+            updateEmployee = connection.prepareStatement(UPDATE_EMPLOYEE);
             return true;
 
         } catch (SQLException e) {
@@ -40,6 +44,10 @@ public class DataSource {
 
             if (insertIntoEmployees != null) {
                 insertIntoEmployees.close();
+            }
+
+            if (updateEmployee != null) {
+                updateEmployee.close();
             }
 
             if (connection != null) {
@@ -93,10 +101,6 @@ public class DataSource {
         }
     }
 
-    // method to add employee
-    // check if it exists, create psfs for that, prepared statement, check for null in close method
-    // pass all parameters to check if it already exists in a database by select where = ? ? ? ? ?
-
     public void addEmployee(String id, String firstName, String lastName, String email, String dob) {
 
         try {
@@ -117,7 +121,27 @@ public class DataSource {
         }
     }
 
+    public void updateEmployee(String updatedId, String updatedFirstName, String updatedLastName, String updatedEmail,
+                               String whereId, String whereFirstName, String whereLastName) {
+        try {
+            updateEmployee.setString(1, updatedId);
+            updateEmployee.setString(2, updatedFirstName);
+            updateEmployee.setString(3, updatedLastName);
+            updateEmployee.setString(4, updatedEmail);
+            updateEmployee.setString(5, whereId);
+            updateEmployee.setString(6, whereFirstName);
+            updateEmployee.setString(7, whereLastName);
 
+            int affectedRows = updateEmployee.executeUpdate();
+            if(affectedRows != 1) {
+                System.out.println("Updating employee failed.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
 
 
 
