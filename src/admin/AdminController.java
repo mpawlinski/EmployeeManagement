@@ -108,6 +108,13 @@ public class AdminController {
             listEmployees();
         }
     }
+
+    @FXML
+    public void deleteEmployee() {
+        Employee employee = employeeTableView.getSelectionModel().getSelectedItem();
+        DataSource.getInstance().deleteEmployee(employee.getId(), employee.getFirstName(), employee.getLastName());
+        listEmployees();
+    }
 }
 
 class GetAllEmployees extends Task{

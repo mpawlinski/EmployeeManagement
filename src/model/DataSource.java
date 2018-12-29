@@ -14,12 +14,14 @@ public class DataSource {
             " VALUES (?, ?, ?, ?, ?)";
 
     public static final String UPDATE_EMPLOYEE = "UPDATE employees SET id = ?, firstname = ?, lastname = ?, email = ? WHERE id = ? AND firstname = ? AND lastname = ?";
+    public static final String DELETE_EMPLOYEE = "DELETE FROM employees WHERE id = ? AND firstname = ? AND lastname = ?";
 
     private Connection connection;
 
     private PreparedStatement listEmployees;
     private PreparedStatement insertIntoEmployees;
     private PreparedStatement updateEmployee;
+    private PreparedStatement deleteEmployee;
 
     public boolean open() {
         try {
@@ -27,6 +29,7 @@ public class DataSource {
             listEmployees = connection.prepareStatement(QUERY_EMPLOYEES);
             insertIntoEmployees = connection.prepareStatement(INSERT_EMPLOYEE);
             updateEmployee = connection.prepareStatement(UPDATE_EMPLOYEE);
+            deleteEmployee = connection.prepareStatement(DELETE_EMPLOYEE);
             return true;
 
         } catch (SQLException e) {
@@ -48,6 +51,10 @@ public class DataSource {
 
             if (updateEmployee != null) {
                 updateEmployee.close();
+            }
+
+            if(deleteEmployee != null) {
+                deleteEmployee.close();
             }
 
             if (connection != null) {
@@ -139,6 +146,23 @@ public class DataSource {
 
         } catch (SQLException e) {
             System.out.println("Error " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public void deleteEmployee(String selectedId, String selectedFirstName, String selectedLastName) {
+        try {
+            deleteEmployee.setString(1, selectedId);
+            deleteEmployee.setString(2, selectedFirstName);
+            deleteEmployee.setString(3, selectedLastName);
+
+            int affectedRows = deleteEmployee.executeUpdate();
+            if(affectedRows != 1) {
+                System.out.println("SQL DELETE failed.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error. " + e.getMessage());
             e.printStackTrace();
         }
     }
