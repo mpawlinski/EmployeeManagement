@@ -52,9 +52,25 @@ public class AdminController {
         String email = emailTextField.getText();
         String dob = dobDatePickerField.getEditor().getText();
 
-        DataSource.getInstance().addEmployee(id, firstName, lastName, email, dob);
-        listEmployees();
-        clear();
+        if(validateInput()) {
+            if(!DataSource.getInstance().doesAlreadyExists(id, firstName, lastName, email)) {
+                DataSource.getInstance().addEmployee(id, firstName, lastName, email, dob);
+                listEmployees();
+                clear();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Cannot add employee");
+                alert.setHeaderText("Employee already exists");
+                alert.showAndWait();
+                clear();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Employee cannot be created");
+            alert.setHeaderText("Empty fields must be filled.");
+            alert.showAndWait();
+        }
+
     }
 
     public void clearFields() {
@@ -101,6 +117,7 @@ public class AdminController {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
 
         EditDialogController editDialogController = fxmlLoader.getController();
+        editDialogController.editEmployee(selectedEmployee);
 
         Optional<ButtonType> result = dialog.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK) {
@@ -114,6 +131,19 @@ public class AdminController {
         Employee employee = employeeTableView.getSelectionModel().getSelectedItem();
         DataSource.getInstance().deleteEmployee(employee.getId(), employee.getFirstName(), employee.getLastName());
         listEmployees();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Confirmation");
+        alert.setHeaderText("Employee Deleted");
+        alert.showAndWait();
+    }
+
+    public boolean validateInput() {
+        if(idTextField.getText().isEmpty() || firstNameTextField.getText().isEmpty() || lastNameTextField.getText().isEmpty()
+        || lastNameTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || dobDatePickerField.getEditor().getText().isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
 

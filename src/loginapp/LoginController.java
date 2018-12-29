@@ -49,6 +49,7 @@ public class LoginController {
 
         // comboBox
         comboBox.setItems(FXCollections.observableArrayList(Options.values()));
+        comboBox.getSelectionModel().selectFirst();
     }
 
     @FXML

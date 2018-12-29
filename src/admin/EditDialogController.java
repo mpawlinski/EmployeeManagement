@@ -23,12 +23,12 @@ public class EditDialogController {
     @FXML
     private TableView<Employee> employeeTableView;
 
-//    public void editEmployee(Employee employee) {
-//        idField.setText(employee.getId());
-//        firstNameField.setText(employee.getFirstName());
-//        lastNameField.setText(employee.getLastName());
-//        emailField.setText(employee.getEmail());
-//    }
+    public void editEmployee(Employee employee) {
+        idField.setText(employee.getId());
+        firstNameField.setText(employee.getFirstName());
+        lastNameField.setText(employee.getLastName());
+        emailField.setText(employee.getEmail());
+    }
 
     public void updateEmployee(Employee employee) {
         String updatedId = idField.getText();

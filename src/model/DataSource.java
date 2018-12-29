@@ -15,6 +15,7 @@ public class DataSource {
 
     public static final String UPDATE_EMPLOYEE = "UPDATE employees SET id = ?, firstname = ?, lastname = ?, email = ? WHERE id = ? AND firstname = ? AND lastname = ?";
     public static final String DELETE_EMPLOYEE = "DELETE FROM employees WHERE id = ? AND firstname = ? AND lastname = ?";
+    public static final String QUERY_IF_EXISTS = "SELECT * FROM employees WHERE id = ? AND firstname = ? AND lastname = ? AND email = ?";
 
     private Connection connection;
 
@@ -22,14 +23,17 @@ public class DataSource {
     private PreparedStatement insertIntoEmployees;
     private PreparedStatement updateEmployee;
     private PreparedStatement deleteEmployee;
+    private PreparedStatement queryEmployee;
 
     public boolean open() {
+
         try {
             connection = DriverManager.getConnection(CONNECTION_STRING);
             listEmployees = connection.prepareStatement(QUERY_EMPLOYEES);
             insertIntoEmployees = connection.prepareStatement(INSERT_EMPLOYEE);
             updateEmployee = connection.prepareStatement(UPDATE_EMPLOYEE);
             deleteEmployee = connection.prepareStatement(DELETE_EMPLOYEE);
+            queryEmployee = connection.prepareStatement(QUERY_IF_EXISTS);
             return true;
 
         } catch (SQLException e) {
@@ -39,6 +43,7 @@ public class DataSource {
     }
 
     public void close() {
+
         try {
 
             if (listEmployees != null) {
@@ -55,6 +60,10 @@ public class DataSource {
 
             if(deleteEmployee != null) {
                 deleteEmployee.close();
+            }
+
+            if(queryEmployee != null) {
+                queryEmployee.close();
             }
 
             if (connection != null) {
@@ -79,7 +88,6 @@ public class DataSource {
     }
 
     public static DataSource getInstance() {
-
         return instance;
     }
 
@@ -130,6 +138,7 @@ public class DataSource {
 
     public void updateEmployee(String updatedId, String updatedFirstName, String updatedLastName, String updatedEmail,
                                String whereId, String whereFirstName, String whereLastName) {
+
         try {
             updateEmployee.setString(1, updatedId);
             updateEmployee.setString(2, updatedFirstName);
@@ -151,6 +160,7 @@ public class DataSource {
     }
 
     public void deleteEmployee(String selectedId, String selectedFirstName, String selectedLastName) {
+
         try {
             deleteEmployee.setString(1, selectedId);
             deleteEmployee.setString(2, selectedFirstName);
@@ -167,7 +177,27 @@ public class DataSource {
         }
     }
 
+    public boolean doesAlreadyExists(String id, String firstName, String lastName, String email) {
+        try {
 
+            queryEmployee.setString(1, id);
+            queryEmployee.setString(2, firstName);
+            queryEmployee.setString(3, lastName);
+            queryEmployee.setString(4, email);
+
+            ResultSet results = queryEmployee.executeQuery();
+
+            if(results.next()) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error");
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
 
 
