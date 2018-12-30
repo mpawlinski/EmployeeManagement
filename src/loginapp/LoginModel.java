@@ -44,21 +44,5 @@ public class LoginModel {
             return false;
 
         }
-//        finally {
-//            try {
-//
-//                if (queryLogin != null) {
-//                    queryLogin.close();
-//                }
-//
-//                if(results != null) {
-//                    results.close();
-//                }
-//
-//            } catch (SQLException e) {
-//                System.out.println("Error closing database. " + e.getMessage());
-//                e.printStackTrace();
-//            }
-//        }
     }
 }

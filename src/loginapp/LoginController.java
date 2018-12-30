@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.DataSource;
 
 import java.io.IOException;
 
@@ -63,6 +64,8 @@ public class LoginController {
 
             switch(comboBox.getValue().toString()) {
                 case "Employee":
+//                    Long userId = getUserIdFromUsername(username.getText());
+//                    employeeLogin(userId);
                     employeeLogin();
                     break;
                 case "Admin":
@@ -76,7 +79,15 @@ public class LoginController {
         }
     }
 
+//    private Long getUserIdFromUsername(String username) {
+//        DataSource.getInstance()...
+//    }
+
+//    public void employeeLogin(Long userId) {  <-- use this
     public void employeeLogin() {
+
+//        LoggedUser.getInstance().setUsername(userId);
+
         try {
             FXMLLoader loader = new FXMLLoader();
             Stage employeeStage = new Stage();
@@ -101,7 +112,7 @@ public class LoginController {
             Stage adminStage = new Stage();
             Parent root = loader.load();
             AdminController adminController = loader.getController();
-            adminController.listEmployees();
+//            adminController.listEmployees();
             Scene adminScene = new Scene(root);
 
             adminStage.setScene(adminScene);
