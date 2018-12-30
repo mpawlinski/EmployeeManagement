@@ -1,2 +1,4 @@
 # EmployeeManagement
-JavaFX Application to manage employees data which connects to the database and allows both - user and admin to log in and perform CRUD operations.
+JavaFX Application that connects to the database and allows:
+admin - to perform CRUD operations on the data
+employee - add relevant notes/todo items
