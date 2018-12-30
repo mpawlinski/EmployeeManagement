@@ -60,12 +60,12 @@ public class LoginController {
             stage.close();
 
             switch(comboBox.getValue().toString()) {
-                case "Employee":
+                case "employee":
 //                    Long userId = getUserIdFromUsername(username.getText());
 //                    employeeLogin(userId);
                     employeeLogin();
                     break;
-                case "Admin":
+                case "admin":
                     adminLogin();
                     break;
             }
@@ -109,7 +109,7 @@ public class LoginController {
             Stage adminStage = new Stage();
             Parent root = loader.load();
             AdminController adminController = loader.getController();
-//            adminController.listEmployees();
+            adminController.listEmployees();
             Scene adminScene = new Scene(root);
 
             adminStage.setScene(adminScene);

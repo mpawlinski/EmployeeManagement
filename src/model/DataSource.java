@@ -11,7 +11,7 @@ public class DataSource {
 
     public static final String LOGIN_QUERY = "SELECT * FROM users WHERE username = ? AND password = ? AND status = ?";
 
-    public static final String QUERY_EMPLOYEES = "SELECT * FROM users";
+    public static final String QUERY_USERS = "SELECT * FROM users";
 
     public static final String INSERT_EMPLOYEE = "INSERT INTO users(username, password, firstname, lastname, email, phonenumber, status)" +
             " VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -28,7 +28,7 @@ public class DataSource {
     private Connection connection;
 
     private PreparedStatement login;
-//    private PreparedStatement listEmployees;
+    private PreparedStatement listUsers;
 //    private PreparedStatement insertIntoEmployees;
 //    private PreparedStatement updateEmployee;
 //    private PreparedStatement deleteEmployee;
@@ -40,7 +40,7 @@ public class DataSource {
         try {
             connection = DriverManager.getConnection(CONNECTION_STRING);
             login = connection.prepareStatement(LOGIN_QUERY);
-//            listEmployees = connection.prepareStatement(QUERY_EMPLOYEES);
+            listUsers = connection.prepareStatement(QUERY_USERS);
 //            insertIntoEmployees = connection.prepareStatement(INSERT_EMPLOYEE);
 //            updateEmployee = connection.prepareStatement(UPDATE_EMPLOYEE);
 //            deleteEmployee = connection.prepareStatement(DELETE_EMPLOYEE);
@@ -62,9 +62,9 @@ public class DataSource {
                 login.close();
             }
 
-//            if (listEmployees != null) {
-//                listEmployees.close();
-//            }
+            if (listUsers != null) {
+                listUsers.close();
+            }
 //
 //            if (insertIntoEmployees != null) {
 //                insertIntoEmployees.close();
@@ -130,33 +130,33 @@ public class DataSource {
         return connection != null;
     }
 
-//    public List<Employee> queryEmployees() {
-//
-//        try {
-//            ResultSet results = listEmployees.executeQuery();
-//
-//            List<Employee> employees = new ArrayList<>();
-//            while(results.next()) {
-//                Employee employee = new Employee();
-//
-//                employee.setId(results.getInt(1));
-//                employee.setUsername(results.getString(2));
-//                employee.setPassword(results.getString(3));
-//                employee.setFirstName(results.getString(4));
-//                employee.setLastName(results.getString(5));
-//                employee.setEmail(results.getString(6));
-//                employee.setPhoneNumber(results.getInt(7));
-//                employee.setStatus(results.getString(8));
-//                employees.add(employee);
-//            }
-//
-//            return employees;
-//
-//        } catch (SQLException e) {
-//            System.out.println("Query error. " + e.getMessage());
-//            return null;
-//        }
-//    }
+    public List<Employee> queryEmployees() {
+
+        try {
+            ResultSet results = listUsers.executeQuery();
+
+            List<Employee> employees = new ArrayList<>();
+            while(results.next()) {
+                Employee employee = new Employee();
+
+                employee.setId(results.getInt(1));
+                employee.setUsername(results.getString(2));
+                employee.setPassword(results.getString(3));
+                employee.setFirstName(results.getString(4));
+                employee.setLastName(results.getString(5));
+                employee.setEmail(results.getString(6));
+                employee.setPhoneNumber(results.getInt(7));
+                employee.setStatus(results.getString(8));
+                employees.add(employee);
+            }
+
+            return employees;
+
+        } catch (SQLException e) {
+            System.out.println("Query error. " + e.getMessage());
+            return null;
+        }
+    }
 
 //    public void addEmployee(String id, String firstName, String lastName, String email, String dob) {
 //

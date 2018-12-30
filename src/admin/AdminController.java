@@ -37,12 +37,12 @@ public class AdminController {
     @FXML
     private TableView<Employee> employeeTableView;
 
-//    public void listEmployees() {
-//        Task<ObservableList<Employee>> task = new GetAllEmployees();
-//        employeeTableView.itemsProperty().bind(task.valueProperty());
-//
-//        new Thread(task).start();
-//    }
+    public void listEmployees() {
+        Task<ObservableList<Employee>> task = new GetAllEmployees();
+        employeeTableView.itemsProperty().bind(task.valueProperty());
+
+        new Thread(task).start();
+    }
 
 //    @FXML
 //    public void insertEmployee() throws SQLException {
@@ -147,11 +147,11 @@ public class AdminController {
 //    }
 }
 
-//class GetAllEmployees extends Task{
-//
-//    @Override
-//    public ObservableList<Employee> call() {
-//        return FXCollections.observableArrayList(DataSource.getInstance().queryEmployees());
-//    }
-//}
+class GetAllEmployees extends Task{
+
+    @Override
+    public ObservableList<Employee> call() {
+        return FXCollections.observableArrayList(DataSource.getInstance().queryEmployees());
+    }
+}
 
