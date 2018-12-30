@@ -9,6 +9,8 @@ public class DataSource {
     public static final String DB_NAME = "employeeData.db";
     public static final String CONNECTION_STRING = "jdbc:sqlite:C:\\JavaProjects\\EmployeeManagement\\" + DB_NAME;
 
+    public static final String LOGIN_QUERY = "SELECT * FROM users WHERE username = ? AND password = ? AND status = ?";
+
     public static final String QUERY_EMPLOYEES = "SELECT * FROM users";
 
     public static final String INSERT_EMPLOYEE = "INSERT INTO users(username, password, firstname, lastname, email, phonenumber, status)" +
@@ -25,6 +27,7 @@ public class DataSource {
 
     private Connection connection;
 
+    private PreparedStatement login;
 //    private PreparedStatement listEmployees;
 //    private PreparedStatement insertIntoEmployees;
 //    private PreparedStatement updateEmployee;
@@ -36,6 +39,7 @@ public class DataSource {
 
         try {
             connection = DriverManager.getConnection(CONNECTION_STRING);
+            login = connection.prepareStatement(LOGIN_QUERY);
 //            listEmployees = connection.prepareStatement(QUERY_EMPLOYEES);
 //            insertIntoEmployees = connection.prepareStatement(INSERT_EMPLOYEE);
 //            updateEmployee = connection.prepareStatement(UPDATE_EMPLOYEE);
@@ -54,6 +58,10 @@ public class DataSource {
 
         try {
 
+            if (login != null) {
+                login.close();
+            }
+
 //            if (listEmployees != null) {
 //                listEmployees.close();
 //            }
@@ -66,11 +74,11 @@ public class DataSource {
 //                updateEmployee.close();
 //            }
 //
-//            if(deleteEmployee != null) {
+//            if (deleteEmployee != null) {
 //                deleteEmployee.close();
 //            }
 //
-//            if(queryEmployee != null) {
+//            if (queryEmployee != null) {
 //                queryEmployee.close();
 //            }
 
@@ -97,6 +105,29 @@ public class DataSource {
 
     public static DataSource getInstance() {
         return instance;
+    }
+
+    public boolean isLoggedIn(String username, String password, String status) {
+
+        try {
+            login.setString(1, username);
+            login.setString(2, password);
+            login.setString(3, status);
+            ResultSet results = login.executeQuery();
+            if(results.next()) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+    }
+
+    public boolean isDatabaseConnected() {
+        return connection != null;
     }
 
 //    public List<Employee> queryEmployees() {

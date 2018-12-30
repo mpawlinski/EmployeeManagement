@@ -17,16 +17,14 @@ import java.io.IOException;
 
 public class LoginController {
 
-    LoginModel loginModel = new LoginModel();
-
     @FXML
     private Label dbstatus;
 
     @FXML
-    private TextField username;
+    private TextField usernameTextField;
 
     @FXML
-    private PasswordField password;
+    private PasswordField passwordTextField;
 
     @FXML
     private ComboBox<Options> comboBox;
@@ -40,7 +38,7 @@ public class LoginController {
 
     public void initialize() {
         // status label
-        if(loginModel.isDatabaseConnected()) {
+        if(DataSource.getInstance().isDatabaseConnected()) {
             dbstatus.setText("Connected");
             dbstatus.setTextFill(Color.MEDIUMSEAGREEN);
         } else {
@@ -56,8 +54,7 @@ public class LoginController {
     @FXML
     public void login() {
         // when login button is pressed - close login window
-        if(loginModel.isLoggedIn(username.getText(), password.getText(), comboBox.getValue().toString())) {
-
+        if(DataSource.getInstance().isLoggedIn(usernameTextField.getText(), passwordTextField.getText(), comboBox.getValue().toString())) {
             // closing login window after successfully logging in
             Stage stage = (Stage) loginButton.getScene().getWindow();
             stage.close();
