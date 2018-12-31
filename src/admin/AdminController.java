@@ -63,7 +63,7 @@ public class AdminController {
         if(!validateInput()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Missing input");
-            alert.setHeaderText("Please, pass employee information to process");
+            alert.setHeaderText("Pass employee information to process");
             alert.showAndWait();
             return;
         }
@@ -155,22 +155,31 @@ public class AdminController {
         }
     }
 
-//    @FXML
-//    public void deleteEmployee() {
-//        Employee employee = employeeTableView.getSelectionModel().getSelectedItem();
-//        DataSource.getInstance().deleteEmployee(employee.getId(), employee.getFirstName(), employee.getLastName());
-//        listEmployees();
-//        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//        alert.setTitle("Confirmation");
-//        alert.setHeaderText("Employee Deleted");
-//        alert.showAndWait();
-//    }
-//
+    @FXML
+    public void deleteEmployee() {
+
+        Employee selectedEmployee = employeeTableView.getSelectionModel().getSelectedItem();
+        if(selectedEmployee == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle(null);
+            alert.setHeaderText("Select an employee to delete");
+            alert.showAndWait();
+            return;
+        }
+
+        DataSource.getInstance().deleteEmployee(selectedEmployee.getId());
+        listEmployees();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(null);
+        alert.setHeaderText("Employee Deleted");
+        alert.showAndWait();
+    }
+
     public boolean validateInput() {
 
         if(usernameTextField.getText().isEmpty() || passwordTextField.getText().isEmpty() || firstNameTextField.getText().isEmpty()
         || lastNameTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty()
-        || comboBoxStatus.getValue().toString().isEmpty()) {
+        || comboBoxStatus.getValue() == null) {
             return false;
         } else {
             return true;
