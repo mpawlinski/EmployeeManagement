@@ -9,7 +9,10 @@ import model.Employee;
 public class EditDialogController {
 
     @FXML
-    private TextField idField;
+    private TextField usernameField;
+
+    @FXML
+    private TextField passwordField;
 
     @FXML
     private TextField firstNameField;
@@ -21,26 +24,30 @@ public class EditDialogController {
     private TextField emailField;
 
     @FXML
-    private TableView<Employee> employeeTableView;
+    private TextField phoneNumberField;
 
-//    public void editEmployee(Employee employee) {
-//        idField.setText(employee.getId());
-//        firstNameField.setText(employee.getFirstName());
-//        lastNameField.setText(employee.getLastName());
-//        emailField.setText(employee.getEmail());
-//    }
-//
-//    public void updateEmployee(Employee employee) {
-//        String updatedId = idField.getText();
-//        String updatedFirstName = firstNameField.getText();
-//        String updatedLastName = lastNameField.getText();
-//        String updatedEmail = emailField.getText();
-//
-//        String whereId = employee.getId();
-//        String whereFirstName = employee.getFirstName();
-//        String whereLastName = employee.getLastName();
-//
-//        DataSource.getInstance().updateEmployee(updatedId, updatedFirstName, updatedLastName, updatedEmail,
-//                                                whereId, whereFirstName, whereLastName);
-//    }
+    public void editEmployee(Employee employee) {
+
+        usernameField.setText(employee.getUsername());
+        passwordField.setText(employee.getPassword());
+        firstNameField.setText(employee.getFirstName());
+        lastNameField.setText(employee.getLastName());
+        emailField.setText(employee.getEmail());
+        phoneNumberField.setText(Integer.toString(employee.getPhoneNumber()));
+    }
+
+    public void updateEmployee(Employee employee) {
+
+        String updatedUsername = usernameField.getText();
+        String updatedPassword = passwordField.getText();
+        String updatedFirstName = firstNameField.getText();
+        String updatedLastName = lastNameField.getText();
+        String updatedEmail = emailField.getText();
+        int updatedPhoneNumber = Integer.parseInt(phoneNumberField.getText());
+
+        int whereUsernameId = employee.getId();
+
+        DataSource.getInstance().updateEmployee(updatedUsername, updatedPassword, updatedFirstName, updatedLastName,
+                                                updatedEmail, updatedPhoneNumber, whereUsernameId);
+    }
 }

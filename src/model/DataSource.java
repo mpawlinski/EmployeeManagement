@@ -13,11 +13,11 @@ public class DataSource {
 
     public static final String QUERY_USERS = "SELECT * FROM users";
 
-    public static final String INSERT_EMPLOYEE = "INSERT INTO users(username, password, firstname, lastname, email, phonenumber, status)" +
-            " VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public static final String INSERT_EMPLOYEE = "INSERT INTO users(username, password, firstname, lastname, email, phonenumber)" +
+            " VALUES (?, ?, ?, ?, ?, ?)";
 
     public static final String UPDATE_EMPLOYEE = "UPDATE users SET username = ?, password = ?, firstname = ?, lastname = ?" +
-            ", email = ?, phonenumber = ?, status = ? WHERE id = ?";
+            ", email = ?, phonenumber = ? WHERE id = ?";
 
     public static final String DELETE_EMPLOYEE = "DELETE FROM users WHERE id = ?";
 
@@ -30,7 +30,7 @@ public class DataSource {
     private PreparedStatement login;
     private PreparedStatement listUsers;
     private PreparedStatement insertIntoUsers;
-//    private PreparedStatement updateEmployee;
+    private PreparedStatement updateEmployee;
 //    private PreparedStatement deleteEmployee;
     private PreparedStatement queryUsersIfExists;
 //    private PreparedStatement findEmployeeId;
@@ -42,7 +42,7 @@ public class DataSource {
             login = connection.prepareStatement(LOGIN_QUERY);
             listUsers = connection.prepareStatement(QUERY_USERS);
             insertIntoUsers = connection.prepareStatement(INSERT_EMPLOYEE);
-//            updateEmployee = connection.prepareStatement(UPDATE_EMPLOYEE);
+            updateEmployee = connection.prepareStatement(UPDATE_EMPLOYEE);
 //            deleteEmployee = connection.prepareStatement(DELETE_EMPLOYEE);
             queryUsersIfExists = connection.prepareStatement(QUERY_IF_EXISTS);
 //            findEmployeeId = connection.prepareStatement(FIND_EMPLOYEE_ID_BY_NAME);
@@ -69,11 +69,11 @@ public class DataSource {
             if (insertIntoUsers != null) {
                 insertIntoUsers.close();
             }
-//
-//            if (updateEmployee != null) {
-//                updateEmployee.close();
-//            }
-//
+
+            if (updateEmployee != null) {
+                updateEmployee.close();
+            }
+
 //            if (deleteEmployee != null) {
 //                deleteEmployee.close();
 //            }
@@ -92,9 +92,9 @@ public class DataSource {
         }
     }
 
-    public Connection getConnection() {
-        return connection;
-    }
+//    public Connection getConnection() {
+//        return connection;
+//    }
 
     //singleton
     private static DataSource instance = new DataSource();
@@ -181,29 +181,30 @@ public class DataSource {
         }
     }
 
-//    public void updateEmployee(String updatedId, String updatedFirstName, String updatedLastName, String updatedEmail,
-//                               String whereId, String whereFirstName, String whereLastName) {
-//
-//        try {
-//            updateEmployee.setString(1, updatedId);
-//            updateEmployee.setString(2, updatedFirstName);
-//            updateEmployee.setString(3, updatedLastName);
-//            updateEmployee.setString(4, updatedEmail);
-//            updateEmployee.setString(5, whereId);
-//            updateEmployee.setString(6, whereFirstName);
-//            updateEmployee.setString(7, whereLastName);
-//
-//            int affectedRows = updateEmployee.executeUpdate();
-//            if(affectedRows != 1) {
-//                System.out.println("Updating employee failed.");
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println("Error " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-//
+    public void updateEmployee(String updatedUsername, String updatedPassword, String updatedFirstName,
+                               String updatedLastName, String updatedEmail, int updatedPhoneNumber,
+                               int whereId) {
+
+        try {
+            updateEmployee.setString(1, updatedUsername);
+            updateEmployee.setString(2, updatedPassword);
+            updateEmployee.setString(3, updatedFirstName);
+            updateEmployee.setString(4, updatedLastName);
+            updateEmployee.setString(5, updatedEmail);
+            updateEmployee.setInt(6, updatedPhoneNumber);
+            updateEmployee.setInt(7, whereId);
+
+            int affectedRows = updateEmployee.executeUpdate();
+            if(affectedRows != 1) {
+                System.out.println("Updating employee failed.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 //    public void deleteEmployee(String selectedId, String selectedFirstName, String selectedLastName) {
 //
 //        try {

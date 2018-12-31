@@ -21,7 +21,7 @@
         <tabs>
           <Tab text="Users">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="584.0" prefWidth="1214.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="584.0" prefWidth="1205.0">
                      <children>
                         <HBox layoutX="264.0" prefHeight="576.0" prefWidth="943.0">
                            <children>
@@ -152,7 +152,7 @@
                                     <Insets left="10.0" />
                                  </VBox.margin>
                               </Button>
-                              <Button mnemonicParsing="false" prefWidth="240.0" text="Edit">
+                              <Button mnemonicParsing="false" onAction="#showEditDialog" prefWidth="240.0" text="Edit">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
