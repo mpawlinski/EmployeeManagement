@@ -32,15 +32,6 @@ public class EmployeeController {
 
         new Thread(task).start();
     }
-
-
-//    private List<TodoItem> getItems() {
-//        Long userId = LoggedUser.getInstance().getUsername();
-//
-//        List<TodoItem> items = DataSource.getInstance().getToDoItemsForUser(userId);
-//    }
-
-
 }
 
 class GetTodoItems extends Task {
