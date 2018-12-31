@@ -7,11 +7,13 @@ public class TodoItem {
 
     private SimpleIntegerProperty id;
     private SimpleIntegerProperty userId;
+    private SimpleStringProperty title;
     private SimpleStringProperty description;
 
     public TodoItem() {
         this.id = new SimpleIntegerProperty();
         this.userId = new SimpleIntegerProperty();
+        this.title = new SimpleStringProperty();
         this.description = new SimpleStringProperty();
     }
 
@@ -29,6 +31,14 @@ public class TodoItem {
 
     public void setUserId(int userId) {
         this.userId.set(userId);
+    }
+
+    public String getTitle() {
+        return title.get();
+    }
+
+    public void setTitle(String title) {
+        this.title.set(title);
     }
 
     public String getDescription() {

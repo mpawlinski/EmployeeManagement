@@ -33,7 +33,7 @@ public class DataSource {
     private PreparedStatement updateEmployee;
     private PreparedStatement deleteEmployee;
     private PreparedStatement queryUsersIfExists;
-//    private PreparedStatement findEmployeeId;
+    private PreparedStatement findEmployeeId;
 
     public boolean open() {
 
@@ -45,7 +45,7 @@ public class DataSource {
             updateEmployee = connection.prepareStatement(UPDATE_EMPLOYEE);
             deleteEmployee = connection.prepareStatement(DELETE_EMPLOYEE);
             queryUsersIfExists = connection.prepareStatement(QUERY_IF_EXISTS);
-//            findEmployeeId = connection.prepareStatement(FIND_EMPLOYEE_ID_BY_NAME);
+            findEmployeeId = connection.prepareStatement(FIND_EMPLOYEE_ID_BY_NAME);
             return true;
 
         } catch (SQLException e) {
@@ -82,6 +82,10 @@ public class DataSource {
                 queryUsersIfExists.close();
             }
 
+            if (findEmployeeId != null) {
+                findEmployeeId.close();
+            }
+
             if (connection != null) {
                 connection.close();
             }
@@ -92,11 +96,6 @@ public class DataSource {
         }
     }
 
-//    public Connection getConnection() {
-//        return connection;
-//    }
-
-    //singleton
     private static DataSource instance = new DataSource();
 
     private DataSource() {
@@ -241,39 +240,20 @@ public class DataSource {
         return false;
     }
 
-//    public Long getEmployeeIdByUsername(String username) {
-//
-//        try {
-//            findEmployeeId.setString(1, username);
-//
-//            ResultSet resultSet = findEmployeeId.executeQuery();
-//
-//            if (resultSet.next()) {
-//                return resultSet.getLong("id");
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return -1L;
-//    }
+    public int getEmployeeIdByUsername(String username) {
 
+        try {
+            findEmployeeId.setString(1, username);
 
+            ResultSet resultSet = findEmployeeId.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
 
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return -1;
+    }
 }

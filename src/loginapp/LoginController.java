@@ -37,7 +37,7 @@ public class LoginController {
 
 
     public void initialize() {
-        // status label
+
         if(DataSource.getInstance().isDatabaseConnected()) {
             dbstatus.setText("Connected");
             dbstatus.setTextFill(Color.MEDIUMSEAGREEN);
@@ -46,24 +46,23 @@ public class LoginController {
             dbstatus.setTextFill(Color.DARKRED);
         }
 
-        // comboBox
-        comboBox.setItems(FXCollections.observableArrayList(Options.values()));
+        comboBox.setItems(FXCollections.observableArrayList(Options.values())); // setting comboBox values
         comboBox.getSelectionModel().selectFirst();
     }
 
     @FXML
     public void login() {
-        // when login button is pressed - close login window
+
         if(DataSource.getInstance().isLoggedIn(usernameTextField.getText(), passwordTextField.getText(), comboBox.getValue().toString())) {
-            // closing login window after successfully logging in
-            Stage stage = (Stage) loginButton.getScene().getWindow();
-            stage.close();
+
+            Stage stage = (Stage) loginButton.getScene().getWindow(); // closing login window after
+            stage.close();                                            // successfully logging in
 
             switch(comboBox.getValue().toString()) {
                 case "employee":
-//                    Long userId = getUserIdFromUsername(username.getText());
-//                    employeeLogin(userId);
-                    employeeLogin();
+                    int userId = getUserIdFromUsername(usernameTextField.getText());
+                    System.out.println(userId);
+                    employeeLogin(userId);
                     break;
                 case "admin":
                     adminLogin();
@@ -76,14 +75,13 @@ public class LoginController {
         }
     }
 
-//    private Long getUserIdFromUsername(String username) {
-//        DataSource.getInstance()...
-//    }
+    private int getUserIdFromUsername(String username) {
+        return DataSource.getInstance().getEmployeeIdByUsername(username);
+    }
 
-//    public void employeeLogin(Long userId) {  <-- use this
-    public void employeeLogin() {
+    public void employeeLogin(int userId) {
 
-//        LoggedUser.getInstance().setUsername(userId);
+        LoggedUser.getInstance().setUsername(userId);
 
         try {
             FXMLLoader loader = new FXMLLoader();
