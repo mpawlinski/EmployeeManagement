@@ -61,7 +61,7 @@ public class LoginController {
             switch(comboBox.getValue().toString()) {
                 case "employee":
                     int userId = getUserIdFromUsername(usernameTextField.getText());
-                    System.out.println(userId);
+//                    System.out.println(userId); // test
                     employeeLogin(userId);
                     break;
                 case "admin":
@@ -81,13 +81,14 @@ public class LoginController {
 
     public void employeeLogin(int userId) {
 
-        LoggedUser.getInstance().setUsername(userId);
+        LoggedUser.getInstance().setUserId(userId);
 
         try {
             FXMLLoader loader = new FXMLLoader();
             Stage employeeStage = new Stage();
             Pane root = loader.load(getClass().getResource("/employee/employee.fxml").openStream());
             EmployeeController employeeController = loader.getController();
+            employeeController.listTodoItems();
             Scene scene = new Scene(root);
 
             employeeStage.setScene(scene);

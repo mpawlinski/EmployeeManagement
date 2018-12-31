@@ -25,6 +25,8 @@ public class DataSource {
 
     private static final String FIND_EMPLOYEE_ID_BY_NAME = "SELECT id FROM users WHERE username = ?";
 
+    private static final String QUERY_TODO_ITEMS = "SELECT * FROM todoitems WHERE userid = ?";
+
     private Connection connection;
 
     private PreparedStatement login;
@@ -34,6 +36,7 @@ public class DataSource {
     private PreparedStatement deleteEmployee;
     private PreparedStatement queryUsersIfExists;
     private PreparedStatement findEmployeeId;
+    private PreparedStatement findTodoItems;
 
     public boolean open() {
 
@@ -46,6 +49,7 @@ public class DataSource {
             deleteEmployee = connection.prepareStatement(DELETE_EMPLOYEE);
             queryUsersIfExists = connection.prepareStatement(QUERY_IF_EXISTS);
             findEmployeeId = connection.prepareStatement(FIND_EMPLOYEE_ID_BY_NAME);
+            findTodoItems = connection.prepareStatement(QUERY_TODO_ITEMS);
             return true;
 
         } catch (SQLException e) {
@@ -84,6 +88,10 @@ public class DataSource {
 
             if (findEmployeeId != null) {
                 findEmployeeId.close();
+            }
+
+            if (findTodoItems != null) {
+                findTodoItems.close();
             }
 
             if (connection != null) {
@@ -255,5 +263,30 @@ public class DataSource {
         }
 
         return -1;
+    }
+
+    public List<TodoItem> getTodoItemsForUser(int id) {
+
+        try {
+            findTodoItems.setInt(1, id);
+            ResultSet results = findTodoItems.executeQuery();
+
+            List<TodoItem> todoList = new ArrayList<>();
+
+            while(results.next()) {
+                TodoItem todoItem = new TodoItem();
+                todoItem.setId(results.getInt(1));
+                todoItem.setUserId(results.getInt(2));
+                todoItem.setTitle(results.getString(3));
+                todoItem.setDescription(results.getString(4));
+                todoList.add(todoItem);
+            }
+
+            return todoList;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

@@ -2,9 +2,9 @@ package loginapp;
 
 public class LoggedUser {
 
-    private static LoggedUser instance = new LoggedUser();
     private int userId;
     private boolean isAdmin;
+    private static LoggedUser instance = new LoggedUser();
 
     private LoggedUser() {}
 
@@ -16,11 +16,11 @@ public class LoggedUser {
         isAdmin = admin;
     }
 
-    public void setUsername(int userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
-    public int getUsername() {
+    public int getUserId() {
         return userId;
     }
 
