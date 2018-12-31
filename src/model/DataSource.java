@@ -21,7 +21,7 @@ public class DataSource {
 
     public static final String DELETE_EMPLOYEE = "DELETE FROM users WHERE id = ?";
 
-    public static final String QUERY_IF_EXISTS = "SELECT * FROM users WHERE id = ?";
+    public static final String QUERY_IF_EXISTS = "SELECT * FROM users WHERE username = ? AND firstname = ? AND lastname = ?";
 
     private static final String FIND_EMPLOYEE_ID_BY_NAME = "SELECT id FROM users WHERE Username = ?";
 
@@ -29,10 +29,10 @@ public class DataSource {
 
     private PreparedStatement login;
     private PreparedStatement listUsers;
-//    private PreparedStatement insertIntoEmployees;
+    private PreparedStatement insertIntoUsers;
 //    private PreparedStatement updateEmployee;
 //    private PreparedStatement deleteEmployee;
-//    private PreparedStatement queryEmployee;
+    private PreparedStatement queryUsersIfExists;
 //    private PreparedStatement findEmployeeId;
 
     public boolean open() {
@@ -41,10 +41,10 @@ public class DataSource {
             connection = DriverManager.getConnection(CONNECTION_STRING);
             login = connection.prepareStatement(LOGIN_QUERY);
             listUsers = connection.prepareStatement(QUERY_USERS);
-//            insertIntoEmployees = connection.prepareStatement(INSERT_EMPLOYEE);
+            insertIntoUsers = connection.prepareStatement(INSERT_EMPLOYEE);
 //            updateEmployee = connection.prepareStatement(UPDATE_EMPLOYEE);
 //            deleteEmployee = connection.prepareStatement(DELETE_EMPLOYEE);
-//            queryEmployee = connection.prepareStatement(QUERY_IF_EXISTS);
+            queryUsersIfExists = connection.prepareStatement(QUERY_IF_EXISTS);
 //            findEmployeeId = connection.prepareStatement(FIND_EMPLOYEE_ID_BY_NAME);
             return true;
 
@@ -65,10 +65,10 @@ public class DataSource {
             if (listUsers != null) {
                 listUsers.close();
             }
-//
-//            if (insertIntoEmployees != null) {
-//                insertIntoEmployees.close();
-//            }
+
+            if (insertIntoUsers != null) {
+                insertIntoUsers.close();
+            }
 //
 //            if (updateEmployee != null) {
 //                updateEmployee.close();
@@ -78,9 +78,9 @@ public class DataSource {
 //                deleteEmployee.close();
 //            }
 //
-//            if (queryEmployee != null) {
-//                queryEmployee.close();
-//            }
+            if (queryUsersIfExists != null) {
+                queryUsersIfExists.close();
+            }
 
             if (connection != null) {
                 connection.close();
@@ -158,26 +158,29 @@ public class DataSource {
         }
     }
 
-//    public void addEmployee(String id, String firstName, String lastName, String email, String dob) {
-//
-//        try {
-//            insertIntoEmployees.setString(1, id);
-//            insertIntoEmployees.setString(2, firstName);
-//            insertIntoEmployees.setString(3, lastName);
-//            insertIntoEmployees.setString(4, email);
-//            insertIntoEmployees.setString(5, dob);
-//
-//            int affectedRows = insertIntoEmployees.executeUpdate();
-//            if (affectedRows != 1) {
-//                System.out.println("Adding employee failed.");
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println("Error " + e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
-//
+    public void addEmployee(String username, String password, String firstName, String lastName,
+                            String email, int phoneNumber, String status) {
+
+        try {
+            insertIntoUsers.setString(1, username);
+            insertIntoUsers.setString(2, password);
+            insertIntoUsers.setString(3, firstName);
+            insertIntoUsers.setString(4, lastName);
+            insertIntoUsers.setString(5, email);
+            insertIntoUsers.setInt(6, phoneNumber);
+            insertIntoUsers.setString(7, status);
+
+            int affectedRows = insertIntoUsers.executeUpdate();
+            if (affectedRows != 1) {
+                System.out.println("Adding employee failed.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
 //    public void updateEmployee(String updatedId, String updatedFirstName, String updatedLastName, String updatedEmail,
 //                               String whereId, String whereFirstName, String whereLastName) {
 //
@@ -218,28 +221,26 @@ public class DataSource {
 //            e.printStackTrace();
 //        }
 //    }
-//
-//    public boolean doesAlreadyExists(String id, String firstName, String lastName, String email) {
-//        try {
-//
-//            queryEmployee.setString(1, id);
-//            queryEmployee.setString(2, firstName);
-//            queryEmployee.setString(3, lastName);
-//            queryEmployee.setString(4, email);
-//
-//            ResultSet results = queryEmployee.executeQuery();
-//
-//            if(results.next()) {
-//                return true;
-//            }
-//
-//        } catch (SQLException e) {
-//            System.out.println("Error");
-//            e.printStackTrace();
-//        }
-//
-//        return false;
-//    }
+
+    public boolean doesAlreadyExists(String username, String firstName, String lastName) {
+        try {
+
+            queryUsersIfExists.setString(1, username);
+            queryUsersIfExists.setString(2, firstName);
+            queryUsersIfExists.setString(3, lastName);
+            ResultSet results = queryUsersIfExists.executeQuery();
+            if(results.next()) {
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error");
+            e.printStackTrace();
+            return false;
+        }
+
+        return false;
+    }
 
 //    public Long getEmployeeIdByUsername(String username) {
 //

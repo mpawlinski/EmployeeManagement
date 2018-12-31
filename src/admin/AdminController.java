@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import loginapp.Options;
 import model.DataSource;
 import model.Employee;
 
@@ -20,7 +21,10 @@ public class AdminController {
     private AnchorPane mainPanel;
 
     @FXML
-    private TextField idTextField;
+    private TextField usernameTextField;
+
+    @FXML
+    private TextField passwordTextField;
 
     @FXML
     private TextField firstNameTextField;
@@ -32,57 +36,73 @@ public class AdminController {
     private TextField emailTextField;
 
     @FXML
-    private DatePicker dobDatePickerField;
+    private TextField phoneNumberTextField;
+
+    @FXML
+    private ComboBox<Options> comboBoxStatus;
 
     @FXML
     private TableView<Employee> employeeTableView;
 
+
+    public void initialize() {
+        comboBoxStatus.setItems(FXCollections.observableArrayList(Options.values()));
+    }
+
     public void listEmployees() {
+
         Task<ObservableList<Employee>> task = new GetAllEmployees();
         employeeTableView.itemsProperty().bind(task.valueProperty());
 
         new Thread(task).start();
     }
 
-//    @FXML
-//    public void insertEmployee() throws SQLException {
-//        String id = idTextField.getText();
-//        String firstName = firstNameTextField.getText();
-//        String lastName = lastNameTextField.getText();
-//        String email = emailTextField.getText();
-//        String dob = dobDatePickerField.getEditor().getText();
-//
-//        if(validateInput()) {
-//            if(!DataSource.getInstance().doesAlreadyExists(id, firstName, lastName, email)) {
-//                DataSource.getInstance().addEmployee(id, firstName, lastName, email, dob);
-//                listEmployees();
-//                clear();
-//            } else {
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setTitle("Cannot add employee");
-//                alert.setHeaderText("Employee already exists");
-//                alert.showAndWait();
-//                clear();
-//            }
-//        } else {
-//            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//            alert.setTitle("Employee cannot be created");
-//            alert.setHeaderText("Empty fields must be filled.");
-//            alert.showAndWait();
-//        }
-//
-//    }
+    @FXML
+    public void insertEmployee() {
+
+        String username = usernameTextField.getText();
+        String password = passwordTextField.getText();
+        String firstName = firstNameTextField.getText();
+        String lastName = lastNameTextField.getText();
+        String email = emailTextField.getText();
+        int phoneNumber = Integer.parseInt(phoneNumberTextField.getText());
+        String status = comboBoxStatus.getValue().toString();
+
+        if(validateInput()) {
+            if(!DataSource.getInstance().doesAlreadyExists(username, firstName, lastName)) {
+                DataSource.getInstance().addEmployee(username, password, firstName, lastName, email, phoneNumber, status);
+                listEmployees();
+                clear();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Cannot add new employee");
+                alert.setHeaderText("Employee already exists");
+                alert.showAndWait();
+                clear();
+            }
+        } else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Employee cannot be created");
+            alert.setHeaderText("Empty fields must be filled.");
+            alert.showAndWait();
+        }
+
+    }
 
     public void clearFields() {
-        idTextField.setText("");
+
+        usernameTextField.setText("");
+        passwordTextField.setText("");
         firstNameTextField.setText("");
         lastNameTextField.setText("");
         emailTextField.setText("");
-        dobDatePickerField.setValue(null);
+        phoneNumberTextField.setText("");
+        comboBoxStatus.valueProperty().setValue(null);
     }
 
     @FXML
     public void clear() {
+
         clearFields();
     }
 
@@ -137,14 +157,16 @@ public class AdminController {
 //        alert.showAndWait();
 //    }
 //
-//    public boolean validateInput() {
-//        if(idTextField.getText().isEmpty() || firstNameTextField.getText().isEmpty() || lastNameTextField.getText().isEmpty()
-//        || lastNameTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || dobDatePickerField.getEditor().getText().isEmpty()) {
-//            return false;
-//        } else {
-//            return true;
-//        }
-//    }
+    public boolean validateInput() {
+
+        if(usernameTextField.getText().isEmpty() || passwordTextField.getText().isEmpty() || firstNameTextField.getText().isEmpty()
+        || lastNameTextField.getText().isEmpty() || emailTextField.getText().isEmpty() || phoneNumberTextField.getText().isEmpty()
+        || comboBoxStatus.getValue().toString().isEmpty()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 
 class GetAllEmployees extends Task{
