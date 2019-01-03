@@ -7,7 +7,7 @@ import java.util.List;
 public class DataSource {
 
     public static final String DB_NAME = "employeeData.db";
-    public static final String CONNECTION_STRING = "jdbc:sqlite:C:\\JavaProjects\\EmployeeManagement\\" + DB_NAME;
+    public static final String CONNECTION_STRING = "jdbc:sqlite:src\\" + DB_NAME;
 
     public static final String LOGIN_QUERY = "SELECT * FROM users WHERE username = ? AND password = ? AND status = ?";
 
@@ -27,6 +27,8 @@ public class DataSource {
 
     private static final String QUERY_TODO_ITEMS = "SELECT * FROM todoitems WHERE userid = ?";
 
+    private static final String INSERT_TODO_ITEM = "INSERT into todoitems(userid, title, description) VALUES(?, ?, ?)";
+
     private Connection connection;
 
     private PreparedStatement login;
@@ -37,6 +39,7 @@ public class DataSource {
     private PreparedStatement queryUsersIfExists;
     private PreparedStatement findEmployeeId;
     private PreparedStatement findTodoItems;
+    private PreparedStatement insertTodoItem;
 
     public boolean open() {
 
@@ -50,6 +53,7 @@ public class DataSource {
             queryUsersIfExists = connection.prepareStatement(QUERY_IF_EXISTS);
             findEmployeeId = connection.prepareStatement(FIND_EMPLOYEE_ID_BY_NAME);
             findTodoItems = connection.prepareStatement(QUERY_TODO_ITEMS);
+            insertTodoItem = connection.prepareStatement(INSERT_TODO_ITEM);
             return true;
 
         } catch (SQLException e) {
@@ -92,6 +96,10 @@ public class DataSource {
 
             if (findTodoItems != null) {
                 findTodoItems.close();
+            }
+
+            if(insertIntoUsers != null) {
+                insertIntoUsers.close();
             }
 
             if (connection != null) {
@@ -287,6 +295,23 @@ public class DataSource {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public void addTaskForEmployee(int userId, String title, String description) {
+
+        try {
+            insertTodoItem.setInt(1, userId);
+            insertTodoItem.setString(2, title);
+            insertTodoItem.setString(3, description);
+
+            int affectedRows = insertTodoItem.executeUpdate();
+            if (affectedRows != 1) {
+                System.out.println("Error adding a task");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

@@ -3,6 +3,8 @@ package admin;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -44,9 +46,16 @@ public class AdminController {
     @FXML
     private TableView<Employee> employeeTableView;
 
+    @FXML
+    private ContextMenu contextMenu;
 
     public void initialize() {
         comboBoxStatus.setItems(FXCollections.observableArrayList(Options.values()));
+        contextMenu = new ContextMenu();
+        MenuItem addTaskMenu = new MenuItem("Add new task");
+        addTaskMenu.setOnAction(event -> showAddTodoItemDialog());
+        employeeTableView.setContextMenu(contextMenu);
+        contextMenu.getItems().addAll(addTaskMenu);
     }
 
     public void listEmployees() {
@@ -185,6 +194,47 @@ public class AdminController {
             return true;
         }
     }
+
+    @FXML
+    public void showAddTodoItemDialog() {
+
+        Employee selectedEmployee = employeeTableView.getSelectionModel().getSelectedItem();
+        if(selectedEmployee == null) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("No employee selected");
+            alert.setHeaderText(null);
+            alert.setContentText("Select employee you want to add new task for.");
+            alert.showAndWait();
+            return;
+        }
+
+        Dialog<ButtonType> dialog = new Dialog<>();
+        dialog.initOwner(mainPanel.getScene().getWindow());
+        dialog.setTitle("Add task");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("addtaskdialog.fxml"));
+
+        try {
+            dialog.getDialogPane().setContent(fxmlLoader.load());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Couldn't load the dialog " + e.getMessage());
+            return;
+        }
+
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        AddTaskController addTaskController = fxmlLoader.getController();
+        addTaskController.getSelectedEmployeeId(selectedEmployee);
+
+        Optional<ButtonType> result = dialog.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK) {
+            addTaskController.addTask(selectedEmployee);
+        }
+    }
+
 }
 
 class GetAllEmployees extends Task{

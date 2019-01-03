@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.GridPane?>
+
+<DialogPane xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="admin.AddTaskController">
+    <headerText>
+        Change existing employee information
+    </headerText>
+    <content>
+        <GridPane>
+            <Label text="User id: " GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="userId" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+            <Label text="Title: " GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <TextField fx:id="todoTitle" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+            <Label text="Description: " GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <TextField fx:id="todoDescription" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+        </GridPane>
+    </content>
+</DialogPane>

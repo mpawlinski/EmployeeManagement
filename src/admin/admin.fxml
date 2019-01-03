@@ -15,6 +15,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 <AnchorPane fx:id="mainPanel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="605.0" prefWidth="1205.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="admin.AdminController">
    <children>
       <TabPane prefHeight="608.0" prefWidth="1205.0" tabClosingPolicy="UNAVAILABLE">
@@ -146,21 +148,41 @@
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
+                                 <graphic>
+                                    <ImageView>
+                                       <Image url="@/toolbarButtonGraphics/general/Save24.gif"/>
+                                    </ImageView>
+                                 </graphic>
                               </Button>
                               <Button fx:id="cancelButton" layoutX="10.0" layoutY="180.0" mnemonicParsing="false" onAction="#clear" prefWidth="240.0" text="Cancel/Clear">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
+                                 <graphic>
+                                    <ImageView>
+                                       <Image url="@/toolbarButtonGraphics/general/Refresh24.gif"/>
+                                    </ImageView>
+                                 </graphic>
                               </Button>
                               <Button mnemonicParsing="false" onAction="#showEditDialog" prefWidth="240.0" text="Edit">
                                  <VBox.margin>
                                     <Insets left="10.0" />
                                  </VBox.margin>
+                                 <graphic>
+                                    <ImageView>
+                                       <Image url="@/toolbarButtonGraphics/general/Edit24.gif"/>
+                                    </ImageView>
+                                 </graphic>
                               </Button>
                               <Button mnemonicParsing="false" onAction="#deleteEmployee" prefWidth="240.0" text="Delete">
                                  <VBox.margin>
                                     <Insets left="10.0" right="10.0" />
                                  </VBox.margin>
+                                 <graphic>
+                                    <ImageView>
+                                       <Image url="@/toolbarButtonGraphics/general/Delete24.gif"/>
+                                    </ImageView>
+                                 </graphic>
                               </Button>
                            </children>
                         </VBox>
